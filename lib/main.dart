@@ -12,7 +12,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter Expense Tracker',
+      theme: ThemeData(
+          primarySwatch: Colors.green,
+          accentColor: Colors.amber,
+          fontFamily: 'Quicksand',
+          appBarTheme: AppBarTheme(
+              textTheme: ThemeData.light().textTheme.copyWith(
+                  headline6: TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold, color: Colors.white)))),
       home: MyHomePage(),
     );
   }
@@ -25,10 +35,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(
-        id: 'tx1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
-    Transaction(
-        id: 'tx2', title: 'Portable SSD', amount: 106.55, date: DateTime.now())
+    // Transaction(
+    //     id: 'tx1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+    // Transaction(
+    //     id: 'tx2', title: 'Portable SSD', amount: 106.55, date: DateTime.now())
   ];
 
   void _addNewTransaction(String title, double amount) {
@@ -37,13 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: title,
         amount: amount,
         date: DateTime.now());
-    
+
     setState(() {
       _transactions.add(newTx);
     });
     // close the bottom sheet
     Navigator.of(context).pop();
-  } 
+  }
+
   void showBottomSheet(context) {
     showModalBottomSheet(
         context: context,
