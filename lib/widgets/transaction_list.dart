@@ -4,13 +4,14 @@ import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> _transactions;
+  final Function _deleteTransaction;
 
-  TransactionList(this._transactions);
+  TransactionList(this._transactions, this._deleteTransaction);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: _transactions.isEmpty
           ? Column(children: [
               Text(
@@ -29,7 +30,11 @@ class TransactionList extends StatelessWidget {
             ])
           : ListView.builder(
               itemBuilder: (ctx, index) {
-                return SingleTransaction(transactions: _transactions, index: index);
+                return SingleTransaction(
+                  transactions: _transactions,
+                  index: index,
+                  deleteTransaction: _deleteTransaction,
+                );
               },
               itemCount: _transactions.length,
             ),
@@ -39,12 +44,16 @@ class TransactionList extends StatelessWidget {
 
 class SingleTransaction extends StatelessWidget {
   const SingleTransaction(
-      {Key? key, required List<Transaction> transactions, required this.index})
+      {Key? key,
+      required List<Transaction> transactions,
+      required this.index,
+      required this.deleteTransaction})
       : _transactions = transactions,
         super(key: key);
 
   final List<Transaction> _transactions;
   final int index;
+  final Function deleteTransaction;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +78,11 @@ class SingleTransaction extends StatelessWidget {
               fontSize: 18,
               color: Theme.of(context).primaryColor),
         ),
-        subtitle: Text(
-          DateFormat.yMMMEd().format(_transactions[index].date)
+        subtitle: Text(DateFormat.yMMMEd().format(_transactions[index].date)),
+        trailing: IconButton(
+          onPressed: () => deleteTransaction(_transactions[index].id),
+          icon: Icon(Icons.delete),
+          color: Theme.of(context).errorColor,
         ),
       ),
     );
