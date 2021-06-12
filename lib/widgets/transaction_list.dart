@@ -69,7 +69,9 @@ class SingleTransaction extends StatelessWidget {
               fontSize: 18,
               color: Theme.of(context).primaryColor),
         ),
-        subtitle: Text(DateFormat.yMMMEd().format(_transactions[index].date)),
+        subtitle: Text(
+          DateFormat.yMMMEd().format(_transactions[index].date)
+        ),
       ),
     );
   }

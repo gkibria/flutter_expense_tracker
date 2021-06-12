@@ -1,24 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class NewTransaction extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
+class NewTransaction extends StatefulWidget {
   final Function _submitTx;
 
   NewTransaction(this._submitTx);
 
-  void submitData(){
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+
+  void selectDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2021),
+            lastDate: DateTime.now())
+        .then((value) {
+      if (value == null) {
+        return;
+      }
+      setState(() {
+        selectedDate = value;
+      });
+    });
+  }
+
+  void submitData() {
+    if(amountController.text.isEmpty){
+      return;
+    }
     final txTitle = titleController.text;
     final txAmount = double.parse(amountController.text);
 
-    if (txTitle.isEmpty || txAmount <= 0){
+    if (txTitle.isEmpty || txAmount <= 0) {
       return;
     }
-    _submitTx(
-      txTitle, 
-      txAmount
-    );
+    widget._submitTx(txTitle, txAmount, selectedDate);
   }
 
   @override
@@ -41,11 +64,25 @@ class NewTransaction extends StatelessWidget {
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onSubmitted: (_) => submitData(),
             ),
-            TextButton(
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                      child:
+                          Text(DateFormat.yMMMEd().format(selectedDate)),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        selectDatePicker();
+                      },
+                      child: Text('Change date'))
+                ],
+              ),
+            ),
+            ElevatedButton(
               onPressed: submitData,
               child: Text('Add Transaction'),
-              style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.purple)),
             )
           ],
         ),
