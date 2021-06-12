@@ -29,47 +29,63 @@ class TransactionList extends StatelessWidget {
             ])
           : ListView.builder(
               itemBuilder: (ctx, index) {
-                return Card(
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 2)),
-                        padding: EdgeInsets.all(10),
-                        width: 80,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '\$${_transactions[index].amount.toStringAsFixed(2)}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _transactions[index].title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          Text(
-                            DateFormat.yMMMEd()
-                                .format(_transactions[index].date),
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+                return SingleTransaction(transactions: _transactions, index: index,);
               },
               itemCount: _transactions.length,
             ),
+    );
+  }
+}
+
+class SingleTransaction extends StatelessWidget {
+  const SingleTransaction({
+    Key? key,
+    required List<Transaction> transactions,
+    required this.index
+  }) : _transactions = transactions, super(key: key);
+
+  final List<Transaction> _transactions;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 2)),
+            padding: EdgeInsets.all(10),
+            width: 80,
+            alignment: Alignment.center,
+            child: Text(
+              '\$${_transactions[index].amount.toStringAsFixed(2)}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Theme.of(context).primaryColor),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _transactions[index].title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Text(
+                DateFormat.yMMMEd()
+                    .format(_transactions[index].date),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
