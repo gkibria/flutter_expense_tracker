@@ -29,7 +29,7 @@ class TransactionList extends StatelessWidget {
             ])
           : ListView.builder(
               itemBuilder: (ctx, index) {
-                return SingleTransaction(transactions: _transactions, index: index,);
+                return SingleTransaction(transactions: _transactions, index: index);
               },
               itemCount: _transactions.length,
             ),
@@ -38,11 +38,10 @@ class TransactionList extends StatelessWidget {
 }
 
 class SingleTransaction extends StatelessWidget {
-  const SingleTransaction({
-    Key? key,
-    required List<Transaction> transactions,
-    required this.index
-  }) : _transactions = transactions, super(key: key);
+  const SingleTransaction(
+      {Key? key, required List<Transaction> transactions, required this.index})
+      : _transactions = transactions,
+        super(key: key);
 
   final List<Transaction> _transactions;
   final int index;
@@ -50,41 +49,27 @@ class SingleTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: Theme.of(context).primaryColor,
-                    width: 2)),
-            padding: EdgeInsets.all(10),
-            width: 80,
-            alignment: Alignment.center,
-            child: Text(
+      elevation: 6,
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 32,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FittedBox(
+                child: Text(
               '\$${_transactions[index].amount.toStringAsFixed(2)}',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Theme.of(context).primaryColor),
-            ),
+            )),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _transactions[index].title,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              Text(
-                DateFormat.yMMMEd()
-                    .format(_transactions[index].date),
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        ],
+        ),
+        title: Text(
+          _transactions[index].title,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Theme.of(context).primaryColor),
+        ),
+        subtitle: Text(DateFormat.yMMMEd().format(_transactions[index].date)),
       ),
     );
   }
